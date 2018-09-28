@@ -1,0 +1,36 @@
+<?php
+    $intl = $this->getController()->translator;
+    $this->setTitle($intl->translate("User login"));
+?>
+
+<h3> <?= $intl->translate('User login') ?> </h3>
+
+<form id="frm-login" method="post" data-response="#login-response" data-role='ajax-request'
+    action="<?= $this->basePath() . '/public/Auth/LogIn/attemp' ?>">
+    <div class="form-group">
+        <label for="username"><?= $intl->translate('Username') ?></label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="far fa-user"></i></div>
+            </div>
+            <input autofocus="autofocus" type="text" id="username" name="username" placeholder="<?= $intl->translate('username') ?>" class="form-control" required="required" maxlength="20" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password"><?= $intl->translate('Password') ?></label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fas fa-lock"></i></div>
+            </div>
+            <input type="password" id="password" name="password" placeholder="<?= $intl->translate('password') ?>" class="form-control" required="required" maxlength="20" />
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">
+        <i class="fas fa-sign-in-alt"></i> <?= $intl->translate('Log in') ?>
+    </button>
+    <a href="<?= $this->basePath() ?>/public/Auth/SingUp" role="button" class="btn btn-default">
+        <i class="fas fa-user-plus"></i> <?= $intl->translate('Register') ?>
+    </a>
+</form><br />
+
+<div id="login-response"></div>
