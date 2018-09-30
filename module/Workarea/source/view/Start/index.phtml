@@ -1,0 +1,160 @@
+<?php
+    $intl = $this->getController()->translator;
+    $this->setTitle($intl->translate(""));
+?>
+
+<?php if ($this->param("process") == "success"): ?>
+
+	<div class="ui tabular menu">
+		<a class="ui dropdown item">
+			<?= $intl->translate('File') ?>
+			<i class="dropdown icon"></i>
+			<div class="menu">
+				<div class="item">
+					<i class="dropdown icon"></i>
+					<span><i class="fas fa-plus"></i> &nbsp;<?= $intl->translate('New') ?></span>
+					<div class="menu">
+						<div class="item" class="text" data-toggle="modal" data-role="ajax-request" data-type="get" data-response="#add-project-response"
+							data-url="<?= $this->basePath() ?>/public/Workarea/Projects/add" title="<?= $intl->translate('Add project') ?>"
+							data-callback="v = {
+								before: function() { $('#md-add-project').modal('show'); },
+								success: function() { $('#md-add-project').modal('refresh'); },
+							}"><i class="fas fa-cube"></i>&nbsp; <?= $intl->translate('Project') ?></div>
+						<div class="item" class="text" data-toggle="modal" data-role="ajax-request" data-type="get" data-response="#add-file-response"
+							data-url="<?= $this->basePath() ?>/public/Workarea/Files/add" title="<?= $intl->translate('Add file') ?>"
+							data-callback="v = {
+								before: function() { $('#md-add-file').modal('show'); },
+								success: function() { $('#md-add-file').modal('refresh'); },
+							}"><i class="far fa-file"></i>&nbsp; <?= $intl->translate('File') ?></div>
+					</div>
+				</div>
+				<div class="item">
+					<i class="dropdown icon"></i>
+					<span class="text"><i class="far fa-folder-open"></i> &nbsp;<?= $intl->translate('Open') ?></span>
+					<div class="menu">
+						<div class="item"><i class="fas fa-cube"></i>&nbsp; <?= $intl->translate('Project') ?></div>
+						<div class="item"><i class="far fa-file"></i>&nbsp; <?= $intl->translate('File') ?></div>
+					</div>
+				</div>
+				<div class="item">
+					<i class="far fa-save"></i>&nbsp; <?= $intl->translate('Save all') ?>
+				</div>
+				<div class="item">
+					<!--<a href="<?= $this->basePath() ?>/public/Auth/LogOut/close">-->
+						<i class="fas fa-sign-out-alt"></i>&nbsp; <?= $intl->translate('Log out') ?>
+					<!--</a>-->
+				</div>
+			</div>
+		</a>
+	</div>
+
+	<div>
+		<div class="ui workarea grid" id='grid-workarea'>
+			<div class="three wide column">
+				<div class="ui icon buttons">
+					<button class="ui button" data-url="<?= $this->basePath() ?>/public/Workarea/Projects/list"
+						data-role="ajax-request" data-type="get" data-response="#list-projects-response" id="btn-list-projects">
+						<i class="refresh icon"></i>
+					</button>
+					<button class="ui button" data-url="<?= $this->basePath() ?>/public/Workarea/Files/list"
+						data-role="ajax-request" data-type="get" data-response="#list-files-response" id="btn-list-files">
+						<i class="refresh icon"></i>
+					</button>
+					<button class="ui button" onclick="
+
+						if ($('#grid-workarea > .one.column').length)
+						{
+							$('#grid-workarea > .one.column .ui.buttons').removeClass('vertical');
+
+							old_class = $('#grid-workarea > .one.column').attr('class');
+							$('#grid-workarea > .one.column').attr('class', old_class.replace('one', 'three'));
+
+							old_class = $('#grid-workarea > .fourteen.column').attr('class');
+							$('#grid-workarea > .fourteen.column').attr('class', old_class.replace('fourteen', 'twelve'));
+
+							$(this).html('<i class=\'window minimize icon\'></i>');
+						}
+						else {
+							$('#grid-workarea > .three.column .ui.buttons').addClass('vertical');
+
+							old_class = $('#grid-workarea > .three.column').attr('class');
+							$('#grid-workarea > .three.column').attr('class', old_class.replace('three', 'one'));
+
+							old_class = $('#grid-workarea > .twelve.column').attr('class');
+							$('#grid-workarea > .twelve.column').attr('class', old_class.replace('twelve', 'fourteen'));
+
+							$(this).html('<i class=\'window restore icon\'></i>');
+						}
+					">
+						<i class="window minimize icon"></i>
+					</button>
+				</div>
+				<div class="ui relaxed divided list" id="list-projects-response"></div>
+				<div class="ui relaxed divided list" id="list-files-response"></div>
+			</div>
+			<div class="twelve wide column" id="worksheet-collector">
+				<div class="ui pointing secondary menu" style="overflow-x: auto">
+					<a class="active item worksheet-item-title" data-tab="home"><?= $intl->translate('Home') ?></a>
+				</div>
+				<div class="ui active tab vertical segment worksheet-item-content" data-tab="home" data-resource="<?= $this->basePath() ?>/public/Connections/Tools/worksheet">
+					<div id="activity-response"><?= $intl->translate('Welcome to SQL Web Manager') ?>!</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui modal" id="md-add-project">
+		<div class="header"><?= $intl->translate('Add project') ?></div>
+		<div class="content">
+			<div id="add-project-response"></div>
+		</div>
+	</div>
+
+	<div class="ui modal" id="md-delete-project">
+		<div class="header"><?= $intl->translate('Delete project') ?></div>
+		<div class="content">
+			<div id="delete-connection-response"></div>
+		</div>
+	</div>
+
+	<div class="ui modal" id="md-add-file">
+		<div class="header"><?= $intl->translate('Add file') ?></div>
+		<div class="content">
+			<div id="add-file-response"></div>
+		</div>
+	</div>
+
+	<div class="ui modal" id="md-delete-file">
+		<div class="header"><?= $intl->translate('Delete file') ?></div>
+		<div class="content">
+			<div id="delete-connection-response"></div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(function() {
+
+			$("#btn-list-projects").trigger("click");
+			$("#btn-list-files").trigger("click");
+
+			// hide contextual menus
+			$("body").delegate("*", "click", function(e) {
+				$('.app-contextual-menu').css('display', 'none');
+			});
+
+		});
+	</script>
+
+<?php elseif ($this->param("process") == "error"): ?>
+
+	<div class="alert alert-danger">
+		<strong>Error!</strong> <?= $this->param("message") ?>
+	</div>
+
+<?php else: ?>
+
+	<div class="alert alert-danger">
+		<strong>Error!</strong> Unknown error
+	</div>
+
+<?php endif; ?>

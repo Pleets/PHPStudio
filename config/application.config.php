@@ -6,6 +6,7 @@ return [
         'Auth',
         'NotFound',
         'Catcher',
+        'Workarea'
     ],
     'router' => [
         'routes' => [

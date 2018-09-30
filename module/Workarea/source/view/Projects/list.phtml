@@ -1,0 +1,67 @@
+<?php $intl = $this->getController()->translator; ?>
+
+<?php if ($this->param("process") == "success"): ?>
+
+	<?php $projects = $this->param('projects'); ?>
+
+	<?php if (count($projects)): ?>
+		<?php foreach ($projects as $project): ?>
+			<div class="item" id="user-project-list-item-<?= $project->PROJECT_ID ?>">
+			    <div class="right floated content">
+					<div class="ui right dropdown item" id="project-options-<?= $project->PROJECT_ID ?>">
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="header"><?= $project->PROJECT_NAME ?></div>
+							<!--<div class="item btn-new-worksheet" data-id="<?= $project->PROJECT_ID ?>" data-name="<?= $project->PROJECT_NAME ?>">
+								<i class="icon terminal"></i> <?= $intl->translate('New Worksheet') ?>
+							</div>-->
+							<div class="item" data-role="ajax-request" data-response="#delete-project-response" data-type="post"
+								 data-url="<?= $this->basePath() ?>/public/Workarea/Projects/delete"
+								 data-object="v = { id: '<?= $project->PROJECT_ID ?>' }"
+								 data-callback="v = {
+									before: function() { $('#md-delete-project').modal('show'); },
+									success: function() { $('#md-delete-project').modal('refresh'); },
+								 }"><i class="icon trash"></i> <?= $intl->translate('Delete') ?></div>
+						</div>
+					</div>
+			    </div>
+				<i class="teal large cube middle aligned icon"></i>
+				<div class="content view">
+					<a class="header" data-url="<?= $this->basePath() ?>/public/Workarea/Projects/edit/id/<?= $project->PROJECT_ID ?>"
+						data-role="ajax-request" data-type="get" data-response="#activity-response">
+						<?= $project->PROJECT_NAME ?>
+					</a>
+					<div class="description"><?= $intl->translate('database') ?></div>
+				</div>
+				<a class="ui red circular label project-id" onclick="$('#project-options-<?= $project->PROJECT_ID ?>').trigger('click')"><?= $project->PROJECT_ID ?></a>
+			</div>
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+
+<?php elseif ($this->param("process") == "warning"): ?>
+
+	<div class="ui yellow message">
+		<p>
+			<strong><i class="warning icon"></i></strong> &nbsp;<?= $intl->translate($this->param("message")) ?>!
+		</p>
+	</div>
+
+	<?php if ($this->isParam("messages") && count($this->param("messages"))): ?>
+		<?php foreach($this->param("messages") as $input => $messages): ?>
+			<?php $lbl = $this->param("validator")->getOption($input, "label"); ?>
+
+				<h5><strong><?= $intl->translate($lbl) ?></strong></h5>
+				<ol>
+					<?php foreach($messages as $code => $message): ?>
+						<li><?= $message ?></li>
+					<?php endforeach; ?>
+				</ol>
+
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+<?php endif; ?>

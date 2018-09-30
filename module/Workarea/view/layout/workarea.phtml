@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<?php
+	$config = include "config/application.config.php";
+	$intl = $this->getController()->translator;
+?>
+<html lang="<?= $intl->getLocale() ?>">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="icon" href="<?= $this->basePath() ?>/public/img/sql-text.png" type="image/x-icon" />
+	<link rel="shortcut icon" href="<?= $this->basePath() ?>/public/img/sql-text.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<?php
+		$config = include("module/Workarea/config/user.config.php");
+		$title = $this->getTitle();
+
+		$_title = !empty($title) ? $title . " - " : "";
+
+		$this->setTitle($_title . $config["project"]["name"]);
+
+		$description = $this->getDescription();
+
+		if (empty($description))
+			$description = "Integrated Development Environment for PHP";
+	?>
+
+	<title><?= $this->getTitle() ?></title>
+	<meta name="description" content="<?= $intl->translate($description) ?>">
+
+	<link rel="stylesheet" type="text/css" href="<?= $this->basePath(); ?>/public/lib/semantic-ui/semantic.min.css" />
+	<link rel="stylesheet" type="text/css" href="<?= $this->basePath(); ?>/public/css/semantic-config.css" />
+	<link rel="stylesheet" type="text/css" href="<?= $this->basePath(); ?>/public/lib/awesome-icons/css/fa-svg-with-js.css" />
+
+	<script type="text/javascript" src="<?= $this->basePath(); ?>/public/lib/jquery/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="<?= $this->basePath(); ?>/public/lib/awesome-icons/js/popper-1.12.9.min.js"></script>
+	<script type="text/javascript" src="<?= $this->basePath(); ?>/public/lib/semantic-ui/semantic.min.js"></script>
+	<script type="text/javascript" src="<?= $this->basePath(); ?>/public/js/semantic-config.js"></script>
+	<script type="text/javascript" src="<?= $this->basePath(); ?>/public/js/fasterjs.js"></script>
+	<script type="text/javascript" src="<?= $this->basePath(); ?>/public/js/workflow.js"></script>
+
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="<?= $this->basePath(); ?>/public/lib/CodeMirror/lib/codemirror.css" type='text/css' />
+    <link rel="stylesheet" href="<?= $this->basePath(); ?>/public/lib/CodeMirror/theme/monokai.css" type='text/css' />
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/lib/codemirror.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/php/php.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/clike/clike.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/xml/xml.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/sql/sql.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/javascript/javascript.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/mode/css/css.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/addon/selection/active-line.js"></script>
+    <script src="<?= $this->basePath(); ?>/public/lib/CodeMirror/addon/edit/matchbrackets.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="<?= $this->basePath(); ?>/public/css/app.css" />
+
+</head>
+
+<body data-path='<?= $this->basePath(); ?>'>
+
+	<?= $this->content(); ?>
+
+	<script src="<?= $this->basePath(); ?>/public/lib/awesome-icons/js/fontawesome-all.min.js"></script>
+
+	<!-- update title -->
+	<?php if ($this->getTitle() !== $_title): ?>
+		<script type="text/javascript">
+			$("head title").text($("head title").text() + ' - <?= $this->getTitle() ?>');
+		</script>
+	<?php endif; ?>
+
+</body>
+
+</html>
