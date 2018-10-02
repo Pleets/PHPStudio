@@ -17,6 +17,11 @@ class Project extends Entity
 	public $PROJECT_NAME;
 
 	/**
+	* @var string
+	*/
+	public $CONFIG_FILE;
+
+	/**
 	* @var integer
 	*/
 	public $USER_ID;

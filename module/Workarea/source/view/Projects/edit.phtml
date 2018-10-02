@@ -15,6 +15,10 @@
 					<label for="projectname"><?= $intl->translate('Project name') ?></label>
 					<input type="text" id="projectname" name="projectname" placeholder="<?= $intl->translate('helloworld, firstapp, ...') ?>" value="<?= $project->PROJECT_NAME ?>" />
 				</div>
+				<div class="eight wide field">
+					<label for="configfile"><?= $intl->translate('Config file') ?></label>
+					<input type="text" id="configfile" name="configfile" placeholder="<?= $intl->translate('/var/www/youproject/phsproject.json') ?>" value="<?= $project->CONFIG_FILE ?>" />
+				</div>
 			</div>
 		</div>
 

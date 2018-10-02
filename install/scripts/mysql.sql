@@ -14,6 +14,7 @@ CREATE TABLE PHS_PROJECT
 (
     PROJECT_ID           FLOAT(4,0)              NOT NULL,
     PROJECT_NAME         VARCHAR(100)            NOT NULL,
+    CONFIG_FILE          VARCHAR(512)            NOT NULL,
     USER_ID              FLOAT(4,0)              NOT NULL,
     STATE                CHAR(1)                 NOT NULL,
     RECORD_DATE          TIMESTAMP               NOT NULL

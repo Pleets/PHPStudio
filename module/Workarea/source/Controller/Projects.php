@@ -316,7 +316,7 @@ class Projects extends AbstractionController
             else if ($this->isPost())
             {
                 # STANDARD VALIDATIONS [check needed arguments]
-                $needles = ['projectname'];
+                $needles = ['projectname', 'configfile'];
 
                 array_walk($needles, function(&$item) use ($post) {
                     if (!array_key_exists($item, $post))
@@ -336,6 +336,12 @@ class Projects extends AbstractionController
                             "minlength" => 2,
                             "maxlength" => 100
                         ],
+                        "configfile" => [
+                            "required"  => true,
+                            "type"      => "text",
+                            "minlength" => 1,
+                            "maxlength" => 512
+                        ],
                     ],
                 ];
 
@@ -345,6 +351,9 @@ class Projects extends AbstractionController
                         "validators" => [
                             "Alnum"  => ["allowWhiteSpace" => true]
                         ],
+                    ],
+                    "configfile" => [
+                        "label"      => "Config file"
                     ],
                 ];
 
@@ -360,7 +369,7 @@ class Projects extends AbstractionController
                 if (!$validator->isValid())
                 {
                     $data["messages"] = $validator->getMessages();
-                    throw new \Drone\Exception\Exception("Form validation errors", 300);
+                    throw new \Drone\Exception\Exception("Form validation errors");
                 }
 
                 $this->getProjectEntity()->getTableGateway()->getDriver()->getDb()->beginTransaction();
@@ -372,6 +381,7 @@ class Projects extends AbstractionController
                     "PROJECT_ID"   => $PROJECT_ID,
                     "USER_ID"      => $this->getIdentity(),
                     "PROJECT_NAME" => $post["projectname"],
+                    "CONFIG_FILE"  => $post["configfile"],
                     "STATE"        =>  'A'
                 ]);
 
@@ -501,6 +511,12 @@ class Projects extends AbstractionController
                             "minlength" => 2,
                             "maxlength" => 100
                         ],
+                        "configfile" => [
+                            "required"  => true,
+                            "type"      => "text",
+                            "minlength" => 1,
+                            "maxlength" => 512
+                        ],
                     ],
                 ];
 
@@ -510,6 +526,9 @@ class Projects extends AbstractionController
                         "validators" => [
                             "Alnum"  => ["allowWhiteSpace" => true]
                         ],
+                    ],
+                    "configfile" => [
+                        "label"      => "Config file",
                     ],
                 ];
 
@@ -541,6 +560,11 @@ class Projects extends AbstractionController
 
                 if ($project->STATE == 'I')
                     throw new \Drone\Exception\Exception("This project was deleted");
+
+                $project->exchangeArray([
+                    "PROJECT_NAME" => $post["projectname"],
+                    "CONFIG_FILE"  => $post["configfile"]
+                ]);
 
                 $this->getProjectEntity()->update($project, [
                     "PROJECT_ID"    => $post["_project_id"],

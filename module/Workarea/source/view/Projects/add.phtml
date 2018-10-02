@@ -3,12 +3,16 @@
 <?php if ($this->param("process") == "register-form"): ?>
 
 	<form class="ui form" id="frm-add-project" data-role="ajax-request" data-response="#add-project-post-response"
-		action="<?= $this->basePath() ?>/public/Workarea/Projects/add" method="post">
+		action="<?= $this->basePath() ?>/public/Workarea/Projects/add" method="post" autocomplete="off">
 		<div class="field">
 			<div class="fields">
 				<div class="eight wide field">
 					<label for="projectname"><?= $intl->translate('Project name') ?></label>
 					<input type="text" id="projectname" name="projectname" placeholder="<?= $intl->translate('helloworld, firstapp, ...') ?>" />
+				</div>
+				<div class="eight wide field">
+					<label for="configfile"><?= $intl->translate('Config file') ?></label>
+					<input type="text" id="configfile" name="configfile" placeholder="<?= $intl->translate('/var/www/youproject/phsproject.json') ?>" />
 				</div>
 			</div>
 		</div>
