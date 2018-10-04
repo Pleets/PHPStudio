@@ -6,19 +6,19 @@ use Drone\Db\Entity;
 
 class User extends Entity
 {
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     public $TOKEN;
 
-	/**
-	 * @var date
-	 */
+    /**
+     * @var string
+     */
     public $RECORD_DATE;
 
     public function __construct($data = [])
     {
-		$config = include 'module/Auth/config/user.config.php';
+        $config = include 'module/Auth/config/user.config.php';
 
         $username_str = $config["authentication"]["gateway"]["credentials"]["username"];
         $password_str = $config["authentication"]["gateway"]["credentials"]["password"];
@@ -31,10 +31,10 @@ class User extends Entity
             $this->{$field} = null;
         }
 
-    	parent::__construct($data);
+        parent::__construct($data);
 
-		$table  = $config["authentication"]["gateway"]["entity"];
-		$prefix = $config["database"]["prefix"];
+        $table  = $config["authentication"]["gateway"]["entity"];
+        $prefix = $config["database"]["prefix"];
 
         $this->setTableName($prefix . "_" . $table);
     }

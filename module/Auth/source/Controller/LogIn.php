@@ -30,11 +30,6 @@ class LogIn extends AbstractionController
     private $userRoleAdapter;
 
     /**
-     * @var EntityAdapter
-     */
-    private $dbUserRoleAdapter;
-
-    /**
      * @return EntityAdapter
      */
     private function getUserAdapter()
@@ -58,19 +53,6 @@ class LogIn extends AbstractionController
         $this->userRoleAdapter = new EntityAdapter(new TableGateway(new UserRole()));
 
         return $this->userRoleAdapter;
-    }
-
-    /**
-     * @return EntityAdapter
-     */
-    private function getDbUserRoleAdapter()
-    {
-        if (!is_null($this->dbUserRoleAdapter))
-            return $this->dbUserRoleAdapter;
-
-        $this->dbUserRoleAdapter = new EntityAdapter(new TableGateway(new DbUserRole()));
-
-        return $this->dbUserRoleAdapter;
     }
 
     /**
@@ -131,7 +113,7 @@ class LogIn extends AbstractionController
             $http = new Http();
             $http->writeStatus($http::HTTP_METHOD_NOT_ALLOWED);
 
-            die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED .' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
+            die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED . ' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
         }
 
         $this->checkSession();
@@ -161,7 +143,7 @@ class LogIn extends AbstractionController
                 $http = new Http();
                 $http->writeStatus($http::HTTP_METHOD_NOT_ALLOWED);
 
-                die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED .' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
+                die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED . ' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
             }
 
             # STANDARD VALIDATIONS [check needed arguments]
@@ -173,7 +155,7 @@ class LogIn extends AbstractionController
                     $http = new Http();
                     $http->writeStatus($http::HTTP_BAD_REQUEST);
 
-                    die('Error ' . $http::HTTP_BAD_REQUEST .' (' . $http->getStatusText($http::HTTP_BAD_REQUEST) . ')!!');
+                    die('Error ' . $http::HTTP_BAD_REQUEST . ' (' . $http->getStatusText($http::HTTP_BAD_REQUEST) . ')!!');
                 }
             });
 
@@ -364,7 +346,7 @@ class LogIn extends AbstractionController
             foreach ($errors as $errno => $error)
             {
                 $errorInformation .=
-                    "<strong style='color: #a94442'>".
+                    "<strong style='color: #a94442'>" .
                         $method
                             . "</strong>: <span style='color: #e24f4c'>{$error}</span> \n<br />";
             }

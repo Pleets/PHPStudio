@@ -3,11 +3,11 @@
 return [
     'router' => [
         'routes' => [
-        	'NotFound' => [
-        		'module' => 'NotFound',
-        		'controller' => '',
-        		'view' => ''
-        	]
+            'NotFound' => [
+                'module' => 'NotFound',
+                'controller' => '',
+                'view' => ''
+            ]
         ],
     ],
     'view_manager' => [

@@ -6,9 +6,9 @@ use Drone\Db\Entity;
 
 class DbUserRole extends Entity
 {
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     public $USERNAME;
 
     /**

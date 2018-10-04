@@ -3,11 +3,11 @@
 return [
     'router' => [
         'routes' => [
-        	'Auth' => [
-        		'module' => 'Auth',
-        		'controller' => 'LogIn',
-        		'view' => 'index'
-        	]
+            'Auth' => [
+                'module' => 'Auth',
+                'controller' => 'LogIn',
+                'view' => 'index'
+            ]
         ],
     ],
     'view_manager' => [

@@ -20,7 +20,7 @@ class LogOut extends AbstractionController
             $http = new Http();
             $http->writeStatus($http::HTTP_METHOD_NOT_ALLOWED);
 
-            die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED .' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
+            die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED . ' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
         }
 
         $config = include 'module/Auth/config/user.config.php';

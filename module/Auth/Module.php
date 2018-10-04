@@ -11,8 +11,14 @@ use Drone\Util\ArrayDimension;
 
 class Module extends AbstractionModule
 {
+    /**
+     * @var \Zend\I18n\Translator\Translator
+     */
+    private $translator;
+
     public function init(AbstractionController $c)
     {
+        $data = [];
         $config = $this->getUserConfig();
 
         $_config = ArrayDimension::toUnidimensional($config, "_");
@@ -202,8 +208,8 @@ class Module extends AbstractionModule
         $c->translator = new \Zend\Mvc\I18n\Translator($i18nTranslator);
     }
 
-	public function getUserConfig()
-	{
-		return include __DIR__ . "/config/user.config.php";
-	}
+    public function getUserConfig()
+    {
+        return include __DIR__ . "/config/user.config.php";
+    }
 }

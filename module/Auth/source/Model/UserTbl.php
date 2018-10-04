@@ -16,7 +16,7 @@ class UserTbl extends TableGateway
         $table = $this->getEntity()->getTableName();
 
         $config = include 'module/Auth/config/user.config.php';
-        $id_field  = $config["authentication"]["gateway"]["table_info"]["columns"]["id_field"];
+        $id_field = $config["authentication"]["gateway"]["table_info"]["columns"]["id_field"];
 
         $sql = "SELECT CASE WHEN MAX($id_field) IS NULL THEN 1 ELSE MAX($id_field) + 1 END AS USER_ID FROM $table";
 
@@ -37,7 +37,7 @@ class UserTbl extends TableGateway
     public function getUserById($id)
     {
         $config = include 'module/Auth/config/user.config.php';
-        $id_field  = $config["authentication"]["gateway"]["table_info"]["columns"]["id_field"];
+        $id_field = $config["authentication"]["gateway"]["table_info"]["columns"]["id_field"];
 
         $rowset = $this->select([
             $id_field => $id
@@ -69,7 +69,7 @@ class UserTbl extends TableGateway
     public function getUserByUsernameCredential($username)
     {
         $config = include 'module/Auth/config/user.config.php';
-        $username_credential  = $config["authentication"]["gateway"]["credentials"]["username"];
+        $username_credential = $config["authentication"]["gateway"]["credentials"]["username"];
 
         $rowset = $this->select([
             $username_credential => $username

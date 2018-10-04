@@ -6,14 +6,14 @@ use Drone\Db\Entity;
 
 class UserRole extends Entity
 {
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     public $USER_ID;
 
-	/**
-	 * @var integer
-	 */
+    /**
+     * @var integer
+     */
     public $ROLE_ID;
 
     public function __construct($data = [])

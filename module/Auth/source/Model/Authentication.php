@@ -22,7 +22,7 @@ class Authentication extends DriverAdapter
         $db->setDbpass($pass);
 
         if ($db->isConnected())
-            return $db->reconnect()
+            return $db->reconnect();
         else
             return $db->connect();
     }
