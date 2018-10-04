@@ -1,0 +1,185 @@
+<?php $intl = $this->getController()->translator; ?>
+
+<?php
+	$uniqid = $this->param("id");
+    $file   = $this->param("file");
+	$file_contents   = $this->param("file_contents");
+?>
+
+<form id="frm-sql-<?= $uniqid ?>" action="<?= $this->basePath() . '/public/Connections/Tools/execute' ?>" method="post"
+	data-role="ajax-request" data-response="#sql-res-<?= $uniqid ?>"
+    data-callback="v = {
+        before: function()
+        {
+        	$('#continue-statement-<?= $uniqid ?>-scrollex').attr('disabled', 'disabled');
+        },
+        complete: function()
+        {
+        	$('#continue-statement-<?= $uniqid ?>-scrollex').removeAttr('disabled');
+        }
+    }">
+	<div class="form-group">
+		<textarea spellcheck="false" name="sql" id="sql<?= $uniqid ?>" rows="10" ui-codemirror class="form-control" autofocus="autofocus" placeholder="your sql here!"><?= $file_contents ?></textarea>
+		<input type="hidden" name="file" value="<?= $file ?>" />
+		<input type="hidden" name="worksheet" value="<?= $uniqid ?>" />
+	</div>
+
+    <div style="background: #e0e1e2; height: 12px; cursor: n-resize; position: relative; text-align: center;" id="table-sizing-<?= $uniqid ?>">
+        <span style="width: 25px;height: 2px;border-bottom: solid 2px rgb(140,140,140);display: inline-block;position: absolute;top: 7px; margin-left: -13px;"></span>
+        <span style="width: 25px;height: 2px;border-bottom: solid 2px rgb(140,140,140);display: inline-block;position: absolute;top: 3px; margin-left: -13px;"></span>
+    </div>
+
+    <script type="text/javascript">
+
+        $(function(){
+
+            var sizing_e   = document.getElementById("table-sizing-<?= $uniqid ?>");
+            var sizing_box = $("#sql<?= $uniqid ?>").parent().find(".CodeMirror")[0];
+
+            resize = function(sizer, box)
+            {
+                var pos;
+
+                sizer.addEventListener('mousedown', function(event) {
+                    pos = event.clientY;
+                    document.body.addEventListener('mousemove', _resize);
+                });
+
+                document.body.addEventListener('mouseup', function() {
+                    document.body.removeEventListener('mousemove', _resize);
+                });
+
+                function _resize(event) {
+                    var delta = event.clientY - pos;
+                    console.info('Delta: ' + delta);
+
+                    var old_heigth = box.style.height;
+                    console.info('Old height: ' + old_heigth);
+
+                    // height is defined in .CodeMirror class
+                    if (old_heigth.trim() == '')
+                        old_heigth = $(box).css("height");
+
+                    console.info('Old height 2: ' + old_heigth);
+
+                    old_heigth = parseInt(old_heigth.replace('px', ''));
+
+                    console.info('Old height 3: ' + old_heigth);
+
+                    var new_height = old_heigth + delta;
+
+                    box.style.height = new_height + 'px';
+                    pos = event.clientY;
+                }
+            }
+
+            resize(sizing_e,sizing_box);
+        });
+
+    </script>
+
+    <button class="ui button" type="submit"><span class="glyphicon glyphicon-ok"></span> <?= $intl->translate('Execute') ?></button>
+    <button style="display: none" class="ui button" type="button" id="execute-statement-<?= $uniqid ?>" data-role="ajax-request" data-response="#sql-res-<?= $uniqid ?>"
+    data-url="<?= $this->basePath() . '/public/Connections/Tools/execute' ?>" data-type="post"
+    data-object="v = {
+    	file: '<?= $file ?>', worksheet: '<?= $uniqid ?>',
+    	sql: editor<?= $uniqid ?>.getSelection()
+    }"
+    data-callback="v = {
+        before: function()
+        {
+        	$('#continue-statement-<?= $uniqid ?>-scrollex').attr('disabled', 'disabled');
+        },
+        complete: function()
+        {
+			// simulates submitting
+			$('#frm-sql-<?= $uniqid ?> button[type=\'submit\']').removeAttr('disabled');
+        }
+    }"><?= $intl->translate('Execute selection') ?></button>
+    <button disabled="disabled" class="ui icon button" type="button" id="continue-statement-<?= $uniqid ?>-scrollex"
+    	onclick="
+    		if (!$('#sql-res-<?= $uniqid ?> .sql-data').hasClass('auto-height'))
+    			$('#sql-res-<?= $uniqid ?> .sql-data')[0].scrollTop = 9999999;
+    		else
+    			$('#continue-statement-<?= $uniqid ?>').trigger('click');
+    	"><i class="angle double down icon"></i>
+    </button>
+    <button disabled="disabled" style="display: none" class="ui icon button" type="button" id="continue-statement-<?= $uniqid ?>" data-role="ajax-request"
+    data-url="<?= $this->basePath() . '/public/Connections/Tools/execute' ?>" data-type="post"
+    data-object="v = {
+    	file: '<?= $file ?>', worksheet: '<?= $uniqid ?>', sql: '', row_start: '', row_end: '', base64: true
+    }"
+    data-callback="v = {
+        before: function()
+        {
+        	var loader = '<div class=\'ui active inverted dimmer next-loader\'><div class=\'ui indeterminate text loader\'>Loading</div></div>';
+        	$('#sql-res-<?= $uniqid ?>').prepend(loader);
+        	$('#continue-statement-<?= $uniqid ?>').attr('disabled', 'disabled');
+        	$('#continue-statement-<?= $uniqid ?>-scrollex').attr('disabled', 'disabled');
+        },
+		success: function(results)
+		{
+			$('#sql-res-<?= $uniqid ?> .sql-data table tbody tr:last').after(results);
+		},
+		complete: function()
+		{
+			$('#sql-res-<?= $uniqid ?> .next-loader').remove();
+        	$('#continue-statement-<?= $uniqid ?>').removeAttr('disabled');
+        	$('#continue-statement-<?= $uniqid ?>-scrollex').removeAttr('disabled');
+		}
+	}"><i class="angle double down icon"></i></button>
+</form><br />
+
+<div id="sql-res-<?= $uniqid ?>" style="position: relative;">
+	<div class="ui blue message">
+		<p>
+			<strong><i class="info icon"></i></strong> &nbsp;<?= $intl->translate('Press') ?> <strong>CTRL</strong> + <strong>Enter</strong>
+            <?= $intl->translate("to execute the selected statement") ?>
+		</p>
+	</div>
+</div>
+
+<style>
+.CodeMirror-gutter-wrapper {
+	left: -29px !important;
+}
+.CodeMirror-sizer {
+	margin-left: 29px !important;
+}
+.CodeMirror {
+    height: 180px;
+}
+</style>
+
+<script>
+	var editor<?= $uniqid ?> = CodeMirror.fromTextArea(document.getElementById("sql<?= $uniqid ?>"), {
+	    lineNumbers: true,
+	    matchBrackets: true,
+	    mode: "text/x-sql",
+	    indentUnit: 4,
+	    indentWithTabs: true,
+	    theme: 'monokai',
+	});
+
+	$("#frm-sql-<?= $uniqid ?>")[0].addEventListener('keydown', (event) => {
+
+	  	const keyName = event.key;
+
+		if (keyName === 'Control')
+			return;
+
+		if (event.ctrlKey)
+		{
+			if (keyName === 'Enter')
+			{
+				// F5 - Execute several statements are not supported yet
+				$("#execute-statement-<?= $uniqid ?>").trigger('click');
+
+				// simulates submitting
+				$("#frm-sql-<?= $uniqid ?> button[type='submit']").attr('disabled', 'disabled');
+			}
+	  	}
+
+	}, false);
+
+</script>

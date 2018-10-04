@@ -6,7 +6,8 @@ return [
         'Auth',
         'NotFound',
         'Catcher',
-        'Workarea'
+        'Workarea',
+        'FileManager',
     ],
     'router' => [
         'routes' => [
@@ -23,7 +24,7 @@ return [
         ],
     ],
     'environment' => [
-        'base_path' => (dirname(dirname($_SERVER['PHP_SELF'])) == "/") ? "" : dirname(dirname($_SERVER['PHP_SELF'])),
+        'base_path' => (dirname(dirname($_SERVER['PHP_SELF'])) == "/") ? "" : "",
         'dev_mode'  => true,                       // set this to FALSE for production environments
         'locale' => 'en'
     ],

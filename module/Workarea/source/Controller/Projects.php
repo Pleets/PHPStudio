@@ -5,6 +5,7 @@ namespace Workarea\Controller;
 use Auth\Model\User as UserModel;
 use Drone\Mvc\AbstractionController;
 use Drone\Dom\Element\Form;
+use Drone\FileSystem\Shell;
 use Drone\Validator\FormValidator;
 use Drone\Db\TableGateway\EntityAdapter;
 use Drone\Db\TableGateway\TableGateway;
@@ -113,10 +114,48 @@ class Projects extends AbstractionController
                 die('Error ' . $http::HTTP_METHOD_NOT_ALLOWED .' (' . $http->getStatusText($http::HTTP_METHOD_NOT_ALLOWED) . ')!!');
             }
 
-            $data["projects"] = $this->getProjectEntity()->select([
+            $projects = $this->getProjectEntity()->select([
                 "USER_ID" => $this->getIdentity(),
                 "STATE"   => "A"
             ]);
+
+            $shell = new Shell();
+
+            // files per project
+            foreach ($projects as $key => $project)
+            {
+                if (file_exists($project->CONFIG_FILE))
+                {
+                    $files = $shell->ls(dirname($project->CONFIG_FILE));
+
+                    $_files = [];
+                    $_folders = [];
+                    foreach ($files as $file)
+                    {
+                        if (!in_array($file, ['.','..']))
+                        {
+                            $isdir = is_dir($file);
+
+                            if ($isdir)
+                                $_folders[] = [
+                                    "name" => $file,
+                                    "type" => $isdir ? 'DIR' : 'FILE'
+                                ];
+                            else
+                                $_files[] = [
+                                    "name" => $file,
+                                    "type" => is_dir($file) ? 'DIR' : 'FILE'
+                                ];
+                        }
+                    }
+
+                    $projects[$key]->files = array_merge($_folders, $_files);
+                }
+                else
+                    $projects[$key]->files = [];
+            }
+
+            $data["projects"] = $projects;
 
             # SUCCESS-MESSAGE
             $data["process"] = "success";

@@ -4,6 +4,15 @@
 
 	<?php $projects = $this->param('projects'); ?>
 
+	<style>
+		.file-list
+		{
+			list-style-type: none;
+			padding-left: 20px;
+			margin: 10px 0 0 0;
+		}
+	</style>
+
 	<?php if (count($projects)): ?>
 		<?php foreach ($projects as $project): ?>
 			<div class="item" id="user-project-list-item-<?= $project->PROJECT_ID ?>">
@@ -33,7 +42,71 @@
 					</a>
 					<div class="description"><?= $intl->translate('database') ?></div>
 				</div>
-				<a class="ui red circular label project-id" onclick="$('#project-options-<?= $project->PROJECT_ID ?>').trigger('click')"><?= $project->PROJECT_ID ?></a>
+				<?php if (count($project->files)): ?>
+					<ul class="file-list">
+						<?php foreach ($project->files as $file): ?>
+							<li>
+								<?php
+									if ($file["type"] == 'DIR'):
+										$extension_icon = 'inverted black folder';
+									else:
+										switch (strstr(strtolower(basename($file["name"])), '.')):
+case '.xls':
+											case '.xlsx':
+											case '.xltx':
+												$extension_icon = 'fa-file-excel';
+												break;
+											case '.pdf':
+												$extension_icon = 'fa-file-pdf';
+												break;
+											case '.jpg':
+											case '.jpeg':
+											case '.png':
+												$extension_icon = 'fa-file-image';
+												break;
+											case '.doc':
+											case '.docx':
+											case '.rtf':
+												$extension_icon = 'fa-file-word';
+												break;
+											case '.js':
+											case '.json':
+												$extension_icon = 'yellow js';
+												break;
+											case '.php':
+												$extension_icon = 'blue code';
+												break;
+											case '.phar':
+												$extension_icon = 'blue file archive';
+												break;
+											case '.htm':
+											case '.html':
+											case '.xhtml':
+												$extension_icon = 'orange html5';
+												break;
+											case '.lock':
+												$extension_icon = 'secondary lock';
+												break;
+											case '.txt':
+												$extension_icon = 'grey file';
+												break;
+											default:
+												$extension_icon = 'black inverted file';
+												break;
+										endswitch;
+									endif;
+								?>
+
+								<?php $action_class = ($file["type"] == 'DIR') ? "btn-list-files" : "btn-read-file"; ?>
+
+								<span class="<?= $action_class ?>" data-project="<?= $project->PROJECT_ID ?>" data-id="<?= $file["name"] ?>"
+									  data-name="<?= $file["name"] ?>" data-resource="<?= $this->basePath() ?>/public/FileManager/File/read">
+									<i class="<?= $extension_icon ?> icon"></i><?= $file["name"] ?>
+								</span>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>
 	<?php endif; ?>
