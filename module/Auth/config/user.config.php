@@ -111,7 +111,7 @@ return [
         /** TABLE PREFIX:
          * Database prefix of tables, specifically here, the prefix of entity gateway above.
          */
-        "prefix" => ifdef('APP', ["database", "prefix"])
+        "prefix" => 'DPM'
     ],
-    "redirect" => "App"            # the module that will be redirect to, after authentication
+    "redirect" => "Workarea"            # the module that will be redirect to, after authentication
 ];
